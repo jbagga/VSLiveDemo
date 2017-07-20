@@ -1,0 +1,85 @@
+﻿@page "{id:int}"
+@model EditModel
+@functions {
+    public class EditModel : PageModel
+    {
+        private readonly AppDbContext _db;
+
+        public EditModel(AppDbContext db)
+        {
+            _db = db;
+        }
+
+        [TempData]
+        public string Message { get; set; }
+
+        [BindProperty]
+        public Car Car { get; set; }
+        public async Task<IActionResult> OnGetAsync(int id)
+        {
+            Car = await _db.Cars.FindAsync(id);
+            if (Car == null)
+            {
+                Message = $"Car {Car.Make} {Car.Model} with {id} not found!";
+                return RedirectToPage("./Index");
+            }
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync()
+        {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            _db.Attach(Car).State = EntityState.Modified;
+
+            try
+            {
+                await _db.SaveChangesAsync();
+                Message = "Car updated successfully!";
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                Message = $"Car {Car.Id} not found!";
+            }
+
+            return RedirectToPage("./Index");
+        }
+    }
+}
+
+@{
+    ViewData["Title"] = "Edit Car";
+}
+
+<h1>Edit Customer - @Model.Car.Id</h1>
+<form method="post" class="form-horizontal">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input asp-for="Car.Id" type="hidden" />
+    <div class="form-group">
+        <label asp-for="Car.Make" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Car.Make" class="form-control" />
+            <span asp-validation-for="Car.Make" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Car.Model" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Car.Model" class="form-control" />
+            <span asp-validation-for="Car.Model" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

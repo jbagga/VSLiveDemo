@@ -1,0 +1,71 @@
+﻿@page "{handler?}/{id:int?}"
+
+@inject AppDbContext Db
+
+@functions {
+    public IList<Car> Cars { get; private set; }
+
+    [TempData]
+    public string Message { get; set; }
+
+    public bool ShowMessage => !string.IsNullOrEmpty(Message);
+
+    public IActionResult OnGet()
+    {
+        Cars = Db.Cars.ToList();
+        return Page();
+    }
+    public async Task<IActionResult> OnPostDeleteAsync(int id)
+    {
+        var car = await Db.Cars.FindAsync(id);
+        if (car != null)
+        {
+            Db.Cars.Remove(car);
+            await Db.SaveChangesAsync();
+        }
+        Message = $"Car {id} {car.Make} {car.Model} deleted successfully";
+
+        return RedirectToPage();
+    }
+}
+
+@{
+    ViewData["Title"] = "Cars";
+}
+
+<h1>Cars</h1>
+<p>
+    @if (ShowMessage)
+    {
+    <div asp-if="ShowMessage" class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Message
+    </div>
+    }
+</p>
+<form method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Car Make</th>
+                <th>Car Model</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var car in Cars)
+            {
+                <tr>
+                    <td>@car.Make</td>
+                    <td>@car.Model</td>
+                    <td>
+                        <a asp-page="./Edit" asp-route-id="@car.Id" class="btn btn-xs btn-primary">edit</a>
+                        <button type="submit" asp-page-handler="delete" asp-route-id="@car.Id" class="btn btn-xs btn-danger">delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a asp-page="./Create" class="btn btn-sm btn-success">Create</a>
+</form>
