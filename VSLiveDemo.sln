@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26710.3002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorPagesSample", "RazorPagesSample\RazorPagesSample.csproj", "{35BD276E-71EE-4949-A70B-9BB68957E7F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazorPagesSample", "src\RazorPagesSample\RazorPagesSample.csproj", "{35BD276E-71EE-4949-A70B-9BB68957E7F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagHelperComponentSample", "TagHelperComponentSample\TagHelperComponentSample.csproj", "{FEE68498-5621-4215-B462-C30A76D9DCA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TagHelperComponentSample", "src\TagHelperComponentSample\TagHelperComponentSample.csproj", "{FEE68498-5621-4215-B462-C30A76D9DCA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
