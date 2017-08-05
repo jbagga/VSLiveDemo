@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace RazorPagesSample.Pages.Cars
 {
+    [ValidateModel]
     public class CreateModel : PageModel
     {
         private readonly AppDbContext _db;
